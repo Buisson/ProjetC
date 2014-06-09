@@ -37,7 +37,7 @@ unsigned datasize, Word data[datasize], unsigned dataend) {
     for(i=0;i<NREGISTERS;i++){
         pmach->_registers[i]=0;
     }
-    //todo vérifier si datasize ou datasize-1. (bon datasize-1 car SP a 19 dans l'execution)
+    //todo(DONE) vérifier si datasize ou datasize-1. (bon datasize-1 car SP a 19 dans l'execution)
     pmach->_sp=datasize - 1;   //On met le pointeur sp à datasize.(contient les données statiques dans les adresses hautes de la pile.)
 }
 
@@ -202,7 +202,7 @@ void print_data(Machine *pmach) {
  * \param pmach la machine en cours d'exécution
  */
 void print_cpu(Machine *pmach) {
-    printf("*** CPU ***\n");
+    printf("\n*** CPU ***\n");
     printf("PC:  0x%08x   CC: %c\n",pmach->_pc,(pmach->_cc == CC_U)?'U':(pmach->_cc == CC_Z)?'Z':(pmach->_cc == CC_P)?'P':'N');
     int i,cnt=0;
     for(i=0;i<NREGISTERS;i++){
@@ -226,5 +226,9 @@ void print_cpu(Machine *pmach) {
  * \param debug mode de mise au point (pas à apas) ?
  */
 void simul(Machine *pmach, bool debug) {
-    
+    trace("Executing",pmach,pmach->_text[pmach->_pc],pmach->_pc);
+    while(decode_execute(pmach, pmach->_text[pmach->_pc++]) && pmach->_pc<pmach->_textsize)
+        trace("Executing",pmach,pmach->_text[pmach->_pc],pmach->_pc);
+                            //TODO comprendre comment utiliser le debug -->   debug_ask ??
+    //printf("\n");
 }
