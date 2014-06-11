@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <stdlib.h>
 #include <stdio.h>
 #include "error.h"
@@ -25,7 +24,7 @@ const char *warning_names[] =
 //fonction warning
 void warning(Warning warn, unsigned addr){
 	 fprintf(stderr, "WARNING: %s reached at address 0x%x\n",
-          warning_names[warn], addr);
+        warning_names[warn], addr);
 }
 
 //fonction error
@@ -33,15 +32,4 @@ void error(Error err, unsigned addr){
     fprintf(stderr, "ERROR: %s at address 0x%x\n",
             error_names[err], addr);
      exit(1);
-=======
-#include <stdio.h>
-
-#include "error.h"
-
-void warning(Warning warn, unsigned addr){
-
-	printf("BIIIIIIIIIIIIIIIITEEEEEEEEEEEEEEEEE\n");
-
-
->>>>>>> f6b01b1a0096aecb7fe1eebcbefc32ed112a382c
-}
+ }
