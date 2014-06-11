@@ -7,8 +7,6 @@
 #include "debug.h"
 #include "exec.h"
 
-
-
 //! Chargement d'un programme
 /*!
  * La machine est réinitialisée et ses segments de texte et de données sont
@@ -40,9 +38,6 @@ unsigned datasize, Word data[datasize], unsigned dataend) {
     //(bon datasize-1 car SP a 19 dans l'execution)
     pmach->_sp=datasize - 1;   //On met le pointeur sp à datasize.(contient les données statiques dans les adresses hautes de la pile.)
 }
-
-
-
 
 //! Lecture d'un programme depuis un fichier binaire
 /*!
@@ -152,8 +147,7 @@ void dump_memory(Machine *pmach) {
         if(cnt%4==0)
             printf("\n    ");
     }
-    printf("\nunsigned datasize = %d;\nunsigned dataend = %d;\n",pmach->_datasize,pmach->_dataend);
-    
+    printf("\nunsigned datasize = %d;\nunsigned dataend = %d;\n",pmach->_datasize,pmach->_dataend);   
 }
 
 //! Affichage des instructions du programme
@@ -190,10 +184,8 @@ void print_data(Machine *pmach) {
             printf("\n");
         
     }
-    printf("\n");
+    printf("\n\n");
 }
-
-
 
 //! Affichage des registres du CPU
 /*!
@@ -203,7 +195,7 @@ void print_data(Machine *pmach) {
  */
 void print_cpu(Machine *pmach) {
     printf("\n*** CPU ***\n");
-    printf("PC:  0x%08x   CC: %c\n",pmach->_pc,(pmach->_cc == CC_U)?'U':(pmach->_cc == CC_Z)?'Z':(pmach->_cc == CC_P)?'P':'N');
+    printf("PC:  0x%08x   CC: %c\n\n",pmach->_pc,(pmach->_cc == CC_U)?'U':(pmach->_cc == CC_Z)?'Z':(pmach->_cc == CC_P)?'P':'N');
     int i,cnt=0;
     for(i=0;i<NREGISTERS;i++){
         printf("R%02d: 0x%08x %d      ",i,pmach->_registers[i],pmach->_registers[i]);
@@ -212,9 +204,8 @@ void print_cpu(Machine *pmach) {
             printf("\n");
         }
     }
-    
+    printf("\n");    
 }
-
 
 //! Simulation
 /*!

@@ -19,6 +19,7 @@
       <in>error.c</in>
       <in>error.h</in>
       <in>exec.h</in>
+      <in>instruction.c</in>
       <in>instruction.h</in>
       <in>machine.c</in>
       <in>machine.h</in>
