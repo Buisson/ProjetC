@@ -187,6 +187,7 @@ void print_data(Machine *pmach) {
     printf("\n\n");
 }
 
+//
 //! Affichage des registres du CPU
 /*!
  * Les registres généraux sont affichées en format hexadécimal et décimal.
