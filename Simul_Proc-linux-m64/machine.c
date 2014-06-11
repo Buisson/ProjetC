@@ -37,7 +37,7 @@ unsigned datasize, Word data[datasize], unsigned dataend) {
     for(i=0;i<NREGISTERS;i++){
         pmach->_registers[i]=0;
     }
-    //todo(DONE) vérifier si datasize ou datasize-1. (bon datasize-1 car SP a 19 dans l'execution)
+    //(bon datasize-1 car SP a 19 dans l'execution)
     pmach->_sp=datasize - 1;   //On met le pointeur sp à datasize.(contient les données statiques dans les adresses hautes de la pile.)
 }
 
@@ -67,27 +67,19 @@ unsigned datasize, Word data[datasize], unsigned dataend) {
  */
 void read_program(Machine *mach, const char *programfile) {
     unsigned int sizeText,sizeData,endData;
-    //Word *data;
-    //Instruction *text;
     int fd = open(programfile,O_RDONLY);
     /*Lecture des 3 premieres données*/
     read(fd,&sizeText,sizeof(unsigned int));
     read(fd,&sizeData,sizeof(unsigned int));
     read(fd,&endData,sizeof(unsigned int));
     
-    //printf("TEST");
     int i;
     Word *data = malloc(sizeof(Word)*sizeData);
     Instruction *text = malloc(sizeof(Instruction)*sizeText);
     for(i=0;i<sizeText;i++) 
         read(fd,text+i,sizeof(int));
     for(i=0;i<endData;i++)
-        read(fd,data+i,sizeof(int));
-    
-    //printf("TEST %u",data[5]);
-    
-    
-    
+        read(fd,data+i,sizeof(int)); 
     close(fd);
     
     load_program(mach,sizeText,text,sizeData,data,endData);
@@ -124,11 +116,18 @@ Word data[] = {
 unsigned datasize = 20;
 unsigned dataend = 10;
  */
-//TODO faire une redirection pour le dump.
 void dump_memory(Machine *pmach) {
+    
+    int fd = open("dump.bin",O_CREAT|O_RDWR,0777);
+    
+    write(fd,&pmach->_textsize,sizeof(unsigned int));
+    write(fd,&pmach->_datasize,sizeof(unsigned int));
+    write(fd,&pmach->_dataend,sizeof(unsigned int));
+    
     printf("Instruction text[] = {\n    ");
     int i,cnt=0;
     for(i=0;i<pmach->_textsize;i++){
+        write(fd,&pmach->_text[i],sizeof(unsigned int));
         if(i!=pmach->_textsize-1){
             printf("0x%08x, ",pmach->_text[i]._raw);
         }else{
@@ -143,6 +142,7 @@ void dump_memory(Machine *pmach) {
     printf("Word data[] = {\n    ");
     cnt=0;
     for(i=0;i<pmach->_datasize;i++){
+        write(fd,&pmach->_data[i],sizeof(unsigned int));
         if(i!=pmach->_datasize-1){
             printf("0x%08x, ",pmach->_data[i]);
         }else{
@@ -227,8 +227,9 @@ void print_cpu(Machine *pmach) {
  */
 void simul(Machine *pmach, bool debug) {
     trace("Executing",pmach,pmach->_text[pmach->_pc],pmach->_pc);
-    while(decode_execute(pmach, pmach->_text[pmach->_pc++]) && pmach->_pc<pmach->_textsize)
+    
+    while(decode_execute(pmach, pmach->_text[pmach->_pc++]) && pmach->_pc<pmach->_textsize){
+        if(debug) debug = debug_ask(pmach);
         trace("Executing",pmach,pmach->_text[pmach->_pc],pmach->_pc);
-                            //TODO comprendre comment utiliser le debug -->   debug_ask ??
-    //printf("\n");
+    }
 }
