@@ -39,11 +39,6 @@ void print_instruction(Instruction instr, unsigned addr){
 //Instruction faut juste afficher le nom
     if(op==ILLOP||op==NOP||op==RET||op==HALT)
     	return;
-//Instruction faut juste address absolut
-    if(op==PUSH||op==POP){
-        printf("@0x%04x", instr.instr_absolute._address);
-        return;
-    }
 //RC est condition
     if(op==BRANCH||op==CALL){
         // Condition inconnue
@@ -52,13 +47,16 @@ void print_instruction(Instruction instr, unsigned addr){
         printf("%s, ", condition_names[instr.instr_generic._regcond]);
     }
 //RC est numéro de registre pour ADD,STORE,ADD et SUB
-    else{
+    else if(op!=PUSH&&op!=POP){
          printf("R%02u, ", instr.instr_generic._regcond);
     }
-//affiche le dernier champ 
+//affiche le dernier champ, 
     //Valeur immédiate 
-     if(instr.instr_generic._immediate)
-        printf("#%u", instr.instr_immediate._value);  
+     if(instr.instr_generic._immediate){
+         if(op==STORE||op==BRANCH||op==CALL||op==POP)
+            error(ERR_ILLEGAL,addr);
+         printf("#%u", instr.instr_immediate._value);
+     }  
     //Adressage indirect
      else if(instr.instr_generic._indexed)
         printf("%d[R%02u]", instr.instr_indexed._offset,
