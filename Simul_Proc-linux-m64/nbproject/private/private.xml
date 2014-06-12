@@ -12,8 +12,9 @@
         <group>
             <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/Makefile</file>
             <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/machine.c</file>
+            <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/instruction.c</file>
             <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/machine.h</file>
-            <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/exec.h</file>
+            <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/test_simul.c</file>
             <file>file:/home/ca309567/Git/ProjetC/Simul_Proc-linux-m64/debug.h</file>
         </group>
     </open-files>
