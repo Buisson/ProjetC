@@ -24,13 +24,13 @@ LDFLAGS = $(ARCH)
 MKDEPEND = $(CC) -MM
 AR = ar
 RANLIB = ranlib
-DOXYGEN = doxygen
+DOXYGEN = /home/ca309567/Bureau/doxygen-1.8.7/bin/doxygen
 
 # Fichiers
 HDR = $(wildcard *.h)
 
 # CHANGER LA DÉFINITION DE CETTE VARIABLE (USERSRC) POUR Y INDIQUER VOS PROPRES MODULES
-USERSRC = machine.c error.c instruction.c debug.c exec.c
+USERSRC = machine.c error.c instruction.c debug.c #exec.c
 USEROBJ = $(patsubst %.c,%.o,$(USERSRC))
 
 PROG = test_simul
