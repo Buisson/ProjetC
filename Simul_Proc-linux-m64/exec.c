@@ -200,9 +200,6 @@ bool fonction_ret(Machine *pmach, Instruction instr){
 bool fonction_push(Machine *pmach, Instruction instr){
 	si_segstack_erreur(pmach);
 	
-	if(pmach->_sp < pmach->_dataend)
-        warning(WARN_PUSH_STATIC, pmach->_pc - 1);
-	
 	if(instr.instr_generic._immediate)
 		pmach->_data[pmach->_sp] = instr.instr_immediate._value;
 	else{
@@ -227,7 +224,7 @@ bool fonction_pop(Machine *pmach, Instruction instr){
 }
 
 bool fonction_halt(Machine *pmach, Instruction instr){
-	warning(WARN_HALT, pmach->_pc - 1);
+	warning(HALT, pmach->_pc - 1);
 	return false;
 }
 //!
@@ -240,7 +237,7 @@ bool fonction_halt(Machine *pmach, Instruction instr){
 bool decode_execute(Machine *pmach, Instruction instr){
 	
 	unsigned address = get_address(pmach,instr);
-	if(address>=mach->_textsize)
+	if(address>=pmach->_textsize)
 		error(ERR_SEGTEXT,pmach->_pc-1);
 		
 	switch (instr.instr_generic._cop){
@@ -269,7 +266,7 @@ bool decode_execute(Machine *pmach, Instruction instr){
     case HALT:
 		return fonction_halt(pmach, instr);
     default:
-		error(ERR_UNKNOWN, address);
+		error(ERR_UNKNOWN, pmach->_pc-1);
 	}
 }
 
