@@ -7,9 +7,11 @@
 bool debug_ask(Machine *pmach){
 	printf("DEBUG? ");
 	char commande = '\n';
+	int i = 0;
 	char rep;
 	while( (rep=getchar()) != '\n' && rep != EOF){
-		commande = rep;
+		if(i==0) commande = rep;
+		i++;
 	};
 	//printf("%c",rep);
 	switch(commande){
