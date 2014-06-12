@@ -40,16 +40,10 @@
         </makeTool>
       </makefileType>
       <item path="error.c" ex="false" tool="0" flavor2="3">
-        <cTool flags="0">
-        </cTool>
       </item>
       <item path="instruction.c" ex="false" tool="0" flavor2="3">
-        <cTool flags="0">
-        </cTool>
       </item>
       <item path="machine.c" ex="false" tool="0" flavor2="3">
-        <cTool flags="0">
-        </cTool>
       </item>
       <item path="test_simul.c" ex="false" tool="0" flavor2="3">
       </item>

@@ -16,12 +16,16 @@
         <in>syntax.asm</in>
       </df>
       <df name="tests">
-        <in>halt.asm</in>
+        <in>condition.asm</in>
+        <in>illegal.asm</in>
         <in>noText.asm</in>
+        <in>pile.asm</in>
       </df>
+      <in>debug.c</in>
       <in>debug.h</in>
       <in>error.c</in>
       <in>error.h</in>
+      <in>exec.c</in>
       <in>exec.h</in>
       <in>instruction.c</in>
       <in>instruction.h</in>

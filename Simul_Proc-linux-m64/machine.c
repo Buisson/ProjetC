@@ -173,7 +173,7 @@ void print_program(Machine *pmach) {
 0x0009: 0x00000000 0      0x000a: 0x00000000 0      0x000b: 0x00000000 0      
 0x000c: 0x00000000 0      0x000d: 0x00000000 0      0x000e: 0x00000000 0      
 0x000f: 0x00000000 0      0x0010: 0x00000000 0      0x0011: 0x00000000 0
- */
+ *///
 void print_data(Machine *pmach) {
     int i,cnt=0;
     printf("\n*** DATA (size: %d, end = 0x%08x (%d)) ***\n",pmach->_datasize,pmach->_dataend,pmach->_dataend);
