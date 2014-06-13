@@ -73,16 +73,16 @@ unsigned get_address(Machine *pmach, Instruction instr){
  * \return true si le chargement a été fait.
  */
 bool fonction_load(Machine *pmach, Instruction instr){
-	int valeur_immediate = instr.instr_immediate._value;
+	unsigned registre_condition = instr.instr_generic._regcond;
 	
 	if(instr.instr_generic._immediate){
-		pmach->_registers[valeur_immediate] = instr.instr_immediate._value;}
+		pmach->_registers[registre_condition] = instr.instr_immediate._value;}
 	else{
 		unsigned address = get_address(pmach,instr);
 		si_segdata_erreur(pmach,address);
-		pmach->_registers[valeur_immediate] = pmach->_data[address];}
+		pmach->_registers[registre_condition] = pmach->_data[address];}
 	
-	set_cc(pmach,pmach->_registers[valeur_immediate]);
+	set_cc(pmach,pmach->_registers[registre_condition]);
 	return true;	
 }
 
@@ -95,42 +95,53 @@ void si_immediat_erreur(Machine *pmach, Instruction instr){
 /*!
  * \param pmach la machine en cours d'exécution
  * \param instr l'instruction à exécuter
- * \return true sile store a été effectué
+ * \return true si le store a été effectué
  */
 bool fonction_store(Machine *pmach, Instruction instr){
 	si_immediat_erreur(pmach,instr);
-	int valeur_immediate = instr.instr_immediate._value;
+	unsigned registre_condition = instr.instr_generic._regcond;
 	unsigned address = get_address(pmach,instr);
 	si_segdata_erreur(pmach,address);
 	
-	pmach->_data[address] = pmach->_registers[valeur_immediate];
+	pmach->_data[address] = pmach->_registers[registre_condition];
 	return true;
 }
 
 //! Effectue un ADD
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si l'ADD a été effectué
+ */
 bool fonction_add(Machine *pmach, Instruction instr){
-	int valeur_immediate = instr.instr_immediate._value;
+	unsigned registre_condition = instr.instr_generic._regcond;
 	
 	if(instr.instr_generic._immediate)
-		pmach->_registers[valeur_immediate]+= instr.instr_immediate._value;
+		pmach->_registers[registre_condition]+= instr.instr_immediate._value;
 	else{
 		unsigned address= get_address(pmach,instr);
 		si_segdata_erreur(pmach,address);
-		pmach->_registers[valeur_immediate] += pmach->_data[address];}
-	set_cc(pmach, pmach->_registers[valeur_immediate]);
+		pmach->_registers[registre_condition] += pmach->_data[address];}
+	set_cc(pmach, pmach->_registers[registre_condition]);
 	return true;
 	
 }
 //! Effectue un SUB
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si le SUB a été effectué
+ */
 bool fonction_sub(Machine *pmach, Instruction instr){
-	int valeur_immediate = instr.instr_immediate._value;
+		unsigned registre_condition = instr.instr_generic._regcond;
+	
 	if(instr.instr_generic._immediate)
-		pmach->_registers[valeur_immediate]-= instr.instr_immediate._value;
+		pmach->_registers[registre_condition]-= instr.instr_immediate._value;
 	else{
 		unsigned address= get_address(pmach,instr);
 		si_segdata_erreur(pmach,address);
-		pmach->_registers[valeur_immediate] -= pmach->_data[address];}
-	set_cc(pmach, pmach->_registers[valeur_immediate]);
+		pmach->_registers[registre_condition] -= pmach->_data[address];}
+	set_cc(pmach, pmach->_registers[registre_condition]);
 	return true;
 	
 }
@@ -143,7 +154,8 @@ bool fonction_sub(Machine *pmach, Instruction instr){
  */
 bool jump(Machine *pmach, Instruction instr)
 {
-    if((instr.instr_generic._regcond != NC && pmach->_cc == CC_U) || instr.instr_generic._regcond > LAST_CONDITION)
+    if((instr.instr_generic._regcond != NC && pmach->_cc == CC_U) ||
+     instr.instr_generic._regcond > LAST_CONDITION)
         error(ERR_CONDITION, pmach->_pc - 1);
     switch(instr.instr_generic._regcond){
         case NC:
@@ -165,6 +177,11 @@ bool jump(Machine *pmach, Instruction instr)
     }
 }
 //! Effectue un BRANCH
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si le BRANCH a été effectué
+ */
 bool fonction_branch(Machine *pmach, Instruction instr){
 	si_immediat_erreur(pmach,instr);
 	if(jump(pmach,instr))
@@ -172,11 +189,19 @@ bool fonction_branch(Machine *pmach, Instruction instr){
 	return true;
 }
 //! Appelle error lorsqu'on sort de la pile
+/*!
+ * \param pmach la machine en cours d'exécution
+ */
 void si_segstack_erreur(Machine *pmach){
 	 if(pmach->_sp < 0 || pmach->_sp >= pmach->_datasize)
         error(ERR_SEGSTACK, pmach->_pc - 1);
 }
 //!Effectue un CALL
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si CALL a été effectué
+ */
 bool fonction_call(Machine *pmach, Instruction instr){
 	si_immediat_erreur(pmach,instr);
 	if(jump(pmach,instr)){
@@ -189,6 +214,11 @@ bool fonction_call(Machine *pmach, Instruction instr){
 }
 
 //! Effectue un RET
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si RET a été effectué
+ */
 bool fonction_ret(Machine *pmach, Instruction instr){
 	 ++pmach->_sp;
 	 si_segstack_erreur(pmach);
@@ -197,6 +227,11 @@ bool fonction_ret(Machine *pmach, Instruction instr){
  }
 
 //!Effectue un PUSH
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si PUSH a été effectué
+ */
 bool fonction_push(Machine *pmach, Instruction instr){
 	si_segstack_erreur(pmach);
 	
@@ -211,6 +246,11 @@ bool fonction_push(Machine *pmach, Instruction instr){
 }
 
 //!Effectue un POP
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param instr l'instruction à exécuter
+ * \return true si POP a été effectué
+ */
 bool fonction_pop(Machine *pmach, Instruction instr){
 	++pmach->_sp;
 	si_immediat_erreur(pmach,instr);
@@ -235,11 +275,11 @@ bool fonction_halt(Machine *pmach, Instruction instr){
  * \return faux après l'exécution de \c HALT ; vrai sinon
  */
 bool decode_execute(Machine *pmach, Instruction instr){
-	
+	/*
 	unsigned address = get_address(pmach,instr);
 	if(address>=pmach->_textsize)
 		error(ERR_SEGTEXT,pmach->_pc-1);
-		
+	*/	
 	switch (instr.instr_generic._cop){
 	case ILLOP:
 		return fonction_illop(pmach, instr);
