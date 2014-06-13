@@ -33,6 +33,7 @@ bool fonction_nop(Machine *pmach, Instruction instr){
  * \param pmach la machine en cours d'éxécution
  * \param résultat le dernier résultat
  */ 
+ 
 void set_cc(Machine *pmach, int resultat){
 	if(resultat<0)
 		pmach->_cc=CC_N;
@@ -141,6 +142,7 @@ bool fonction_sub(Machine *pmach, Instruction instr){
 		unsigned address= get_address(pmach,instr);
 		si_segdata_erreur(pmach,address);
 		pmach->_registers[registre_condition] -= pmach->_data[address];}
+	
 	set_cc(pmach, pmach->_registers[registre_condition]);
 	return true;
 	
@@ -157,6 +159,7 @@ bool jump(Machine *pmach, Instruction instr)
     if((instr.instr_generic._regcond != NC && pmach->_cc == CC_U) ||
      instr.instr_generic._regcond > LAST_CONDITION)
         error(ERR_CONDITION, pmach->_pc - 1);
+        
     switch(instr.instr_generic._regcond){
         case NC:
             return true;
