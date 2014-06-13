@@ -76,7 +76,7 @@ void read_program(Machine *mach, const char *programfile) {
     for(i=0;i<endData;i++)
         read(fd,data+i,sizeof(int)); 
     close(fd);
-    
+
     load_program(mach,sizeText,text,sizeData,data,endData);
 }
 

@@ -7,7 +7,7 @@
 main    EQU *
         PUSH @op1
         PUSH @op2
-        CALL NC, @subprog
+        CALL NC, @0x001e
         ADD R15, #2
         STORE R00, @result
         HALT 
