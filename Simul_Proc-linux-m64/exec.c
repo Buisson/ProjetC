@@ -323,7 +323,7 @@ bool decode_execute(Machine *pmach, Instruction instr){
  * \param addr son adresse
  */
 void trace(const char *msg, Machine *pmach, Instruction instr, unsigned addr){
-	printf("TRACE Test : %s: 0x%04x: ", msg, addr);
+	printf("TRACE : %s: 0x%04x: ", msg, addr);
 	print_instruction(instr, addr);
 	printf("\n");
 }
