@@ -7,7 +7,7 @@
 main    EQU *
         PUSH @op1
         PUSH @op2
-        CALL NC, @subprog
+        CALL NC, @0x001e
         ADD R15, #2
         STORE R00, @result
         HALT 
@@ -16,7 +16,7 @@ main    EQU *
         NOP 
         NOP
 
-        // Sous-programme
+// Sous-programme
 subprog EQU *
         LOAD R00, 3[R15]
         LOAD R01, 2[R15]
