@@ -52,6 +52,15 @@ void set_cc(Machine *pmach, int resultat){
 	 if(address>= pmach->_datasize)
 		error(ERR_SEGDATA, pmach->_pc-1);
  } 
+ //! Appelle error si nous sommes en dehors du segment de texte
+/*!
+ * \param pmach la machine en cours d'exécution
+ * \param addr l'adresse de la donnée
+ */
+ void si_segtext_erreur(Machine *pmach, unsigned address){
+	 if(address>= pmach->_textsize)
+		error(ERR_SEGTEXT, pmach->_pc-1);
+ } 
  
  //! Calcul l'addresse d'une instruction
  /*!
@@ -158,8 +167,8 @@ bool jump(Machine *pmach, Instruction instr)
 {
     if((instr.instr_generic._regcond != NC && pmach->_cc == CC_U) ||
      instr.instr_generic._regcond > LAST_CONDITION)
-        error(ERR_CONDITION, pmach->_pc - 1);
-        
+        error(ERR_CONDITION, pmach->_pc - 1);   
+      
     switch(instr.instr_generic._regcond){
         case NC:
             return true;
@@ -187,8 +196,11 @@ bool jump(Machine *pmach, Instruction instr)
  */
 bool fonction_branch(Machine *pmach, Instruction instr){
 	si_immediat_erreur(pmach,instr);
-	if(jump(pmach,instr))
-		pmach->_pc = get_address(pmach,instr);
+	if(jump(pmach,instr)){
+		unsigned address= get_address(pmach,instr);
+		si_segtext_erreur_erreur(pmach,address);
+		pmach->_pc = address;
+	}
 	return true;
 }
 //! Appelle error lorsqu'on sort de la pile
@@ -210,7 +222,9 @@ bool fonction_call(Machine *pmach, Instruction instr){
 	if(jump(pmach,instr)){
 		si_segstack_erreur(pmach);
 		pmach->_data[pmach->_sp] = pmach-> _pc;
-		pmach->_pc = get_address(pmach, instr);
+		unsigned address = get_address(pmach,instr);
+		si_segtext_erreur_erreur(pmach,address);
+		pmach->_pc = address;
 		--pmach->_sp;
 	}
 	return true;
@@ -223,7 +237,7 @@ bool fonction_call(Machine *pmach, Instruction instr){
  * \return true si RET a été effectué
  */
 bool fonction_ret(Machine *pmach, Instruction instr){
-	 ++pmach->_sp;
+	 si_segtext_erreur(pmach,++pmach->_sp);
 	 si_segstack_erreur(pmach);
 	 pmach->_pc = pmach ->_data[pmach->_sp];
 	 return true;
@@ -278,11 +292,7 @@ bool fonction_halt(Machine *pmach, Instruction instr){
  * \return faux après l'exécution de \c HALT ; vrai sinon
  */
 bool decode_execute(Machine *pmach, Instruction instr){
-	/*
-	unsigned address = get_address(pmach,instr);
-	if(address>=pmach->_textsize)
-		error(ERR_SEGTEXT,pmach->_pc-1);
-	*/	
+	
 	switch (instr.instr_generic._cop){
 	case ILLOP:
 		return fonction_illop(pmach, instr);
