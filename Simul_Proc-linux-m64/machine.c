@@ -1,3 +1,11 @@
+/*! 
+ *  \brief     machine.c
+ *  \details   Ce fichier implemente les fonctions de machine.h
+ *  \author    Colombet Aurelien
+ *  \date      2014
+ * 
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -6,7 +14,7 @@
 #include "machine.h"
 #include "debug.h"
 #include "exec.h"
-
+//!
 //! Chargement d'un programme
 /*!
  * La machine est réinitialisée et ses segments de texte et de données sont
@@ -91,26 +99,6 @@ void read_program(Machine *mach, const char *programfile) {
  *
  * \param pmach la machine en cours d'exécution
  */
-/*
-    Instruction text[] = {
-    0x00002009, 0x00003009, 0x0000a007, 0x00002f44, 
-    0x00001003, 0x0000000b, 0x00000001, 0x00000001, 
-    0x00000001, 0x00000001, 0x0003f082, 0x0002f182, 
-    0x00001145, 0x00011606, 0x0003f084, 0x00001145, 
-    0x0000d006, 0x00000008, 
-};
-unsigned textsize = 18;
-
-Word data[] = {
-    0x00000000, 0x00000000, 0x00000014, 0x00000005, 
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 
-};
-unsigned datasize = 20;
-unsigned dataend = 10;
- */
 void dump_memory(Machine *pmach) {
     
     int fd = open("dump.bin",O_CREAT|O_RDWR,0777);
@@ -166,13 +154,11 @@ void print_program(Machine *pmach) {
     }
 }
 
-/*EXAMPLE :
-0x0000: 0x00000000 0      0x0001: 0x00000000 0      0x0002: 0x00000014 20     
-0x0003: 0x00000005 5      0x0004: 0x00000000 0      0x0005: 0x00000000 0      
-0x0006: 0x00000000 0      0x0007: 0x00000000 0      0x0008: 0x00000000 0      
-0x0009: 0x00000000 0      0x000a: 0x00000000 0      0x000b: 0x00000000 0      
-0x000c: 0x00000000 0      0x000d: 0x00000000 0      0x000e: 0x00000000 0      
-0x000f: 0x00000000 0      0x0010: 0x00000000 0      0x0011: 0x00000000 0
+//! Affichage des données du programme
+/*!
+ * Les valeurs sont affichées en format hexadécimal et décimal.
+ *
+ * \param pmach la machine en cours d'exécution
  */
 void print_data(Machine *pmach) {
     int i,cnt=0;
