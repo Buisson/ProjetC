@@ -291,7 +291,7 @@ static bool fonction_halt(Machine *pmach, Instruction instr){
  * \param instr l'instruction à exécuter
  * \return faux après l'exécution de \c HALT ; vrai sinon
  */
-static bool decode_execute(Machine *pmach, Instruction instr){
+bool decode_execute(Machine *pmach, Instruction instr){
 	
 switch (instr.instr_generic._cop){
     case ILLOP:
